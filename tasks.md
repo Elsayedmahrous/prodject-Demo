@@ -3,13 +3,11 @@ Schema
 * user name
 * password 
 * email
-* address
 
 /* Admin 
 * user name
 * password 
 * email
-* address
 * controllers user after sign in page room
 * controllers user before sign in page room
 * controllers removes user 
@@ -18,7 +16,6 @@ Schema
 * user name
 * password 
 * email
-* address
 * controllers user and admin after sign in page room
 * controllers removes user and admin
 * controllers time taken to implement the project
@@ -41,4 +38,5 @@ Schema
 /* Authentication 
 * before Project
 * before Room
+
 /* Authorization
