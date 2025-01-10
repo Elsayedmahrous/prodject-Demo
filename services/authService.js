@@ -1,8 +1,7 @@
-const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
-const bcrypt = require('bcryptjs');
 const asyncHandler = require('express-async-handler');
 const User = require('../Models/userSchema');
+const createToken = require('../utils/createToken')
 
 /**
  * desc     signup
@@ -17,9 +16,7 @@ exports.signup = asyncHandler(async (req, res, next) => {
         email: req.body.email,
     });
     //2) Generate token
-    const token = await jwt.sign({ userId: user._Id }, process.env.JWT_SECRET_KEY, {
-        expiresIn: process.env.JWT_EXPIRE_TIME
-    });
+    const token = await createToken(user._id);
 
     res.status(201).json({ data: user, token });
 })
