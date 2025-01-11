@@ -1,12 +1,15 @@
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
 const asyncHandler = require('express-async-handler');
 const User = require('../Models/userSchema');
-const createToken = require('../utils/createToken')
+const createToken = require('../utils/createToken');
+const ApiError = require('../utils/ApiError');
 
 /**
- * desc     signup
- * route    Get/api/v1/auth/signup
- * access   Pubic
+ * 
+ * @desc     signup
+ * @route    Get/api/v1/auth/signup
+ * @access   Pubic
  */
 exports.signup = asyncHandler(async (req, res, next) => {
     //1) create user
@@ -19,4 +22,26 @@ exports.signup = asyncHandler(async (req, res, next) => {
     const token = await createToken(user._id);
 
     res.status(201).json({ data: user, token });
-})
+});
+/**
+ * 
+ * @desc     login
+ * @route    Get/api/v1/auth/login
+ * @access   Pubic
+ */
+exports.login = asyncHandler(async (req, res, next) => {
+    // 1) check if password and email in the body (validation);
+    // 2) check if user exist & check if password is correct
+    const user = await User.findOne({ email: req.body.email });
+    if (!user || ! await bcrypt.compare(req.body.password , user.password)) {
+        return next(new ApiError('Incorrect email or password',401))
+    }
+    // Generate token
+    const token = await createToken(user._id);
+    res.status(200).json({ data: user, token });
+});
+
+//* @desc  make sure the user is logged in
+exports.protect = asyncHandler(async (req, res, next) => {
+    
+});
