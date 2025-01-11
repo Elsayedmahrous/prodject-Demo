@@ -20,28 +20,6 @@ exports.getOne = (Model, populationOpt) => asyncHandler(async (req, res, next) =
     res.status(200).json({ data: document });
 });
 
-// exports.getAll = (Model) => asyncHandler(async (req, res, next) => {
-//     const document = await Model.find();
-//     res.status(200).json({ data: document });
-// });
-exports.getAll = (Model) => asyncHandler(async (req, res) => {
-    let filter = {};
-    if (req.filterObject) {
-        filter = req.filterObject
-    }
-    const documentsCounts = await Model.countDocuments();
-    const apiFeatures = new ApiFeatures(Model.find(filter), req.query)
-        .paginate(documentsCounts)
-        .filter()
-        .limitFields()
-        .sort()
-    
-    const { mongooseQuery , paginateResult } = apiFeatures;
-    const document = await mongooseQuery;
-    
-    res.status(200).json({result: document.length, paginateResult , data: document});
-
-});
 exports.updateUser = (Model) => asyncHandler(async (req, res, next) => {
     const document = await Model.findByIdAndUpdate(req.params.id, req.body, { new: true });
     if (!document) {
