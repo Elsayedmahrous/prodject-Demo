@@ -43,5 +43,12 @@ exports.login = asyncHandler(async (req, res, next) => {
 
 //* @desc  make sure the user is logged in
 exports.protect = asyncHandler(async (req, res, next) => {
-    
+    //* 1) check if token exist , if exist get
+    let token;
+    if (req.headers.authorization) {
+        token = req.headers.authorization.split(" ")[2];
+    }
+    if (!token) {
+        return next(new ApiError('you are not login , please login to get access this route',401));
+    }
 });

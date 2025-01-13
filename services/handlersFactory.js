@@ -1,6 +1,6 @@
 const asyncHandler = require('express-async-handler');
 const ApiError = require('../utils/ApiError');
-// const { Model } = require('mongoose');
+const { Model } = require('mongoose');
 
 exports.createOne = (Model) => asyncHandler(async (req, res, next) => {
     const newDocument = await Model.create(req.body);
@@ -19,6 +19,13 @@ exports.getOne = (Model, populationOpt) => asyncHandler(async (req, res, next) =
     }
     res.status(200).json({ data: document });
 });
+exports.getAll = (Model) => asyncHandler(async (req, res, next) => {
+    const data = await Model.find();
+    if (!data) {
+      return next(new ApiError(`No Data Found`, 404));
+    }
+    res.status(200).json({ data });
+  });
 
 exports.updateUser = (Model) => asyncHandler(async (req, res, next) => {
     const document = await Model.findByIdAndUpdate(req.params.id, req.body, { new: true });

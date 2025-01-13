@@ -1,7 +1,7 @@
 const asyncHandler = require('express-async-handler');
 const apiError = require('../utils/ApiError');
 const crypto = require('bcryptjs');
-const User = require('../Models/userSchema');
+const User = require('../Models/userSchema.js');
 const createToken = require('../utils/createToken.js');
 const factory = require('../services/handlersFactory.js');
 
