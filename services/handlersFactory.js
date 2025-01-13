@@ -28,7 +28,13 @@ exports.getAll = (Model) => asyncHandler(async (req, res, next) => {
   });
 
 exports.updateUser = (Model) => asyncHandler(async (req, res, next) => {
-    const document = await Model.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    const document = await Model.findByIdAndUpdate(req.params.id, {
+        name: req.body.name,
+        password: req.body.password,
+        email: req.body.email,
+        role: req.body.role,
+        userName: req.body.userName
+    },{ new: true });
     if (!document) {
         return next(new ApiError(`No Document for this id ${req.params.id}`, 404))
     }
