@@ -22,16 +22,38 @@ const {
     updateLoggedUserValidator
 }
     = require('../utils/Validators/userValidators')
-// const authService = require('../services/authService');
+const authService = require('../services/authService');
 const router = express.Router();
 
-//* Admin
+//* User
 router.put('/changePassword/:id',changeUserPasswordValidator,changeUserPassword)
-router.route('/').post(createUserValidator, createUser).get(getAll);
-router.route('/:id').get(getUserValidator,getOne).put(updateUserValidator,updateUser).delete(deleteUserValidator,deleteOne);
+router.route('/').post(
+    authService.protect,
+    createUserValidator,
+    createUser)
+    .get(
+        authService.protect,
+        authService.allowedTo('Admin'),
+        getAll
+    
+);
+router.route('/:id')
+    .get(
+        getUserValidator,
+        getOne
+).put(
+    authService.protect,
+    updateUserValidator,
+    updateUser
+).delete(
+    authService.protect,
+    authService.allowedTo("Admin"),
+    deleteUserValidator,
+    deleteOne
+);
 
-router.get('/:getMe', getLoggedUserData);
-router.put('/:updateMe', updateLoggedUserValidator, updateLoggedUserData);
-router.put('/changeMyPassword', updateLoggedUserPassword);
-router.delete('/deleteMe', deleteLoggedUserData)
+router.get('/:getMe',authService.protect, getLoggedUserData,getOne);
+router.put('/:updateMe',authService.protect, updateLoggedUserValidator, updateLoggedUserData);
+router.put('/changeMyPassword',authService.protect, updateLoggedUserPassword);
+router.delete('/deleteMe',authService.protect, deleteLoggedUserData)
 module.exports = router;
