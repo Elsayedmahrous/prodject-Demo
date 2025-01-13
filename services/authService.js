@@ -17,6 +17,7 @@ exports.signup = asyncHandler(async (req, res, next) => {
         name: req.body.name,
         password: req.body.password,
         email: req.body.email,
+        userName: req.body.userName,
     });
     //2) Generate token
     const token = await createToken(user._id);
@@ -46,11 +47,37 @@ exports.protect = asyncHandler(async (req, res, next) => {
     //* 1) check if token exist , if exist get
     let token;
     if (req.headers.authorization) {
-        token = req.headers.authorization.split(" ")[2];
+        token = req.headers.authorization.split(" ")[1];
     }
     if (!token) {
         return next(new ApiError('you are not login , please login to get access this route',401));
     }
-    const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY)
-    console.log(decoded);
+    //* 2) verify token 
+    const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
+    //* 3) Check of user exists
+    const currentUser = await User.findById(decoded.userId)
+    if (!currentUser) {
+        return next(new ApiError('the user that belong this token does no longer exist', 401));
+    }
+    //* 4) check of user change his password after token create
+    if (currentUser.passwordChangeAt, decoded.iat) {
+        const passwordChangeAtTimestamp = parseInt(currentUser.passwordChangeAt.getTime() / 1000, 10);
+        if (passwordChangeAtTimestamp > decoded.iat) {
+            return next(new ApiError('User recently changed his password. please login again...', 401));
+        }
+    }
+    req.user = currentUser;
+    next();
 });
+/**
+ * @desc Authorization (User permissions)
+ * ["admin", "manager"]
+ */
+exports.allowedTo = (...roles) => asyncHandler(async (req, res, next) => {
+    //* 1) access roles
+    //* 1) access registered user
+    if (!roles.includes(req.user.role)) {
+        return next(new ApiError('You not allowed to access this route', 403));
+    }
+    next()
+})
