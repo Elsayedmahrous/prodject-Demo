@@ -4,6 +4,7 @@ const morgan = require('morgan');
 const dotenv = require('dotenv');
 const mountRouters = require('./Routes/index');
 const apiError = require('./utils/ApiError')
+const globalError = require('./middleware/errorMiddleware')
 
 const app = express();
 app.use(express.json())
@@ -24,6 +25,7 @@ if (process.env.NODE_DEV === 'Development') {
 // mountRouters
 mountRouters(app);
 
+app.use(globalError);
 app.all('*', (req, res, next) => {
     next(new apiError(`Can not find this route :${req.originalUrl}`, 400))
 });
