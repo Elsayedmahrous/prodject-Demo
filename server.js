@@ -9,7 +9,7 @@ const app = express();
 app.use(express.json())
 
 // DB
-dotenv.config({ path: 'config.env' });
+dotenv.config({ path: 'confg.env' });
 
 mongoose.connect(process.env.DB_URL).then((conn) => {
     console.log(`Database Connected: ${conn.connection.host}`);
@@ -33,3 +33,4 @@ const PORT = process.env.PORT || 3000
 app.listen(PORT, () => {
     console.log(`App running ${PORT}`);
 });
+
