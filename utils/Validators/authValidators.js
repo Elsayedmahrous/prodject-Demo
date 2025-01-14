@@ -40,4 +40,19 @@ exports.signupValidator = [
         
     check('passwordConfirm').notEmpty().withMessage('Password confirmation required'),
     validationMiddleware
- ]
+]
+//@desc    login
+//@route    Get/api/v1/auth/login
+//@access    Public
+exports.loginValidator = [
+    check('email')
+        .notEmpty()
+        .withMessage('Email required')
+        .isEmail()
+        .withMessage('Invalid email address'),
+    check('password')
+        .notEmpty()
+        .withMessage('Password required')
+        .isLength({ max: 6 })
+        .withMessage('Password must be least 6 characters')
+]
