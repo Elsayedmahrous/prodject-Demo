@@ -21,7 +21,8 @@ const {
     changeUserPasswordValidator,
     updateLoggedUserValidator
 }
-    = require('../utils/Validators/userValidators')
+    = require('../utils/Validators/userValidators');
+
 const authService = require('../services/authService');
 const router = express.Router();
 
@@ -30,12 +31,12 @@ router.put('/changePassword/:id',changeUserPasswordValidator,changeUserPassword)
 router.route('/').post(
     authService.protect,
     createUserValidator,
-    createUser)
+    createUser
+)
     .get(
         authService.protect,
-        authService.allowedTo('Admin'),
-        getAll
-    
+        authService.allowedTo("Admin"),
+        getAll   
 );
 router.route('/:id')
     .get(
