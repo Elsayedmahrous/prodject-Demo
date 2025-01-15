@@ -36,7 +36,7 @@ const userSchema = new mongoose.Schema({
         enum: ["User", "Admin", "Manager"],
         default: 'User',
     },
-
+    isManager: Boolean,
 },
     { timestamps: true });
 
