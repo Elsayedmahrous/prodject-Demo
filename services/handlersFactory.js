@@ -43,11 +43,11 @@ exports.updateUser = (Model) => asyncHandler(async (req, res, next) => {
 });
 
 exports.deleteOne = (Model) => asyncHandler(async (req, res, next) => {
-    const {id} = req.params
+    const { id } = req.params
     const document = await Model.findByIdAndDelete(id);
     if (!document) {
         return next(new ApiError(`No Document for this id ${id}`, 404))
     }
-    document.deleteOne() 
+    document.deleteOne()
     res.status(204).send();
 });
