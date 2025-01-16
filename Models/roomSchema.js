@@ -38,6 +38,7 @@ const roomSchema = new mongoose.Schema({
             type: String,
             required: [true,'Client location is required']
         },
+        maxLength:[1, 'the room too many client'],
     },
 }, { timestamps: true });
 
