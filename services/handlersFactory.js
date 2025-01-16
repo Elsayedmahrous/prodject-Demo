@@ -33,7 +33,10 @@ exports.updateUser = (Model) => asyncHandler(async (req, res, next) => {
         password: req.body.password,
         email: req.body.email,
         role: req.body.role,
-        userName: req.body.userName
+        userName: req.body.userName,
+        title: req.body.title,
+        description: req.body.description,
+        member: req.body.member
     },{ new: true });
     if (!document) {
         return next(new ApiError(`No Document for this id ${req.params.id}`, 404))
