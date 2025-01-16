@@ -1,4 +1,4 @@
-const {check} = require('express-validator')
+const { check } = require('express-validator')
 const validationMiddleware = require('../../middleware/validationMiddleware');
 const Room = require('../../Models/roomSchema');
 
@@ -6,10 +6,8 @@ exports.createRoomValidator = [
     check('title')
         .notEmpty()
         .withMessage('title required')
-        .isLength({ min: 4 })
-        .withMessage('too short title')
-        .isLength({ max: 20 })
-        .withMessage('too long title'),
+        .isLength({ min: 3 })
+        .withMessage('too short title'),
     check('description')
         .notEmpty()
         .withMessage('description required')
@@ -18,9 +16,9 @@ exports.createRoomValidator = [
     check('member')
         .notEmpty()
         .withMessage('Members required')
-        .isLength({ min: 5 })
+        .isInt({min: 4 })
         .withMessage('too little members to room')
-        .isLength({ max: 10 })
+        .isInt({ max: 10 })
         .withMessage('too many members to room'),
     check('isAvailable')
         .notEmpty()
@@ -44,10 +42,8 @@ exports.updateRoomValidator = [
     check('title')
         .notEmpty()
         .withMessage('title required')
-        .isLength({ min: 4 })
-        .withMessage('too short title')
-        .isLength({ max: 20 })
-        .withMessage('too long title'),
+        .isLength({ min: 3 })
+        .withMessage('too short title'),
     check('description')
         .notEmpty()
         .withMessage('description required')
@@ -56,9 +52,9 @@ exports.updateRoomValidator = [
     check('member')
         .notEmpty()
         .withMessage('Members required')
-        .isLength({ min: 5 })
+        .isInt({min: 4 })
         .withMessage('too little members to room')
-        .isLength({ max: 10 })
+        .isInt({ max: 10 })
         .withMessage('too many members to room'),
     
     validationMiddleware
