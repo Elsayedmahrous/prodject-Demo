@@ -8,6 +8,7 @@ const {
     deleteRoom,
     addUserToRoom,
     getUsersToRoom,
+    getRoomDetails,
     deleteUserFromRoom
 } = require('../services/roomService');
 
@@ -32,5 +33,6 @@ router.route('/:id')
 
 router.post('/:id/add-member', addUserToRoom);
 router.get('/:id/members', getUsersToRoom);
+router.get('/:id/details', getRoomDetails);
 router.delete('/:id/delete-member', deleteUserFromRoom);
 module.exports = router;
