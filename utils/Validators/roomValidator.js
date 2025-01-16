@@ -23,6 +23,11 @@ exports.createRoomValidator = [
     check('client.name').notEmpty().withMessage('Client name is required'),
     check('client.phone').notEmpty().withMessage('Client phone is required'),
     check('client.location').notEmpty().withMessage('Client location is required'),
+    check('client.maxLength')
+        .notEmpty()
+        .withMessage('Client long is required')
+        .isInt({ max: 1 })
+        .withMessage('too mush client this is room'),
     check('isAvailable')
         .notEmpty()
         .withMessage('isAvailable required'),
