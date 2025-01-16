@@ -17,6 +17,10 @@ const roomSchema = new mongoose.Schema({
         minLength: [4, 'too little members to room '],
         maxLength:[10, 'too many members to room'],
     },
+    users: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+    }],
     isAvailable: {
         type: Boolean,
         default: true,
