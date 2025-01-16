@@ -20,6 +20,9 @@ exports.createRoomValidator = [
         .withMessage('too little members to room')
         .isInt({ max: 10 })
         .withMessage('too many members to room'),
+    check('client.name').notEmpty().withMessage('Client name is required'),
+    check('client.phone').notEmpty().withMessage('Client phone is required'),
+    check('client.location').notEmpty().withMessage('Client location is required'),
     check('isAvailable')
         .notEmpty()
         .withMessage('isAvailable required'),
@@ -59,3 +62,10 @@ exports.updateRoomValidator = [
     
     validationMiddleware
 ];
+
+exports.createClientValidator = [
+    check('name').notEmpty().withMessage('Client name is required'),
+    check('phone').notEmpty().withMessage('Client phone is required'),
+    check('location').notEmpty().withMessage('Client location is required'),
+    validationMiddleware
+]
