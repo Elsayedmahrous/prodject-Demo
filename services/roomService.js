@@ -89,3 +89,18 @@ exports.getUsersToRoom = asyncHandler(async (req, res, next) => {
     const Members = room.users;
     res.status(200).json({ Members });
 })
+/**
+ * @desc   Get Details Room 
+ * @route  Get /api/v1/Room/id/Details
+ * @access Manager
+ */
+exports.getRoomDetails = asyncHandler(async (req, res, next) => {
+    const room = await Room.findById(req.params.id);
+    if (!room) {
+        return next(new ApiError('Room not found By Id', 404));
+    }
+    res.status(200).json({
+        status: 'success',
+        data: { room }
+    })
+})
