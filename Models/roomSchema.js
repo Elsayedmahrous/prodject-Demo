@@ -24,7 +24,21 @@ const roomSchema = new mongoose.Schema({
     isAvailable: {
         type: Boolean,
         default: true,
-    }
+    },
+    client: {
+        name: {
+            type: String,
+            required: [true, 'Client name is required']
+        },
+        phone: {
+            type: Number,
+            required: [true,'Client phone is required']
+        },
+        location: {
+            type: String,
+            required: [true,'Client location is required']
+        },
+    },
 }, { timestamps: true });
 
 module.exports = mongoose.model('Room', roomSchema);
