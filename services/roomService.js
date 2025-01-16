@@ -12,7 +12,7 @@ exports.createRoom = factory.createOne(Room);
  * @route  Get /api/v1/Room
  * @access Manager
  */
-exports.getRooms = factory.getOne(Room);
+exports.getRooms = factory.getAll(Room);
 /**
  * @desc  Get specific room
  * @route  Get /api/v1/Room
