@@ -5,7 +5,6 @@ const roomSchema = new mongoose.Schema({
         type: String,
         required: [true, 'you must enter the title this is room'],
         minLength: [4, 'too short room title'],
-        maxLength: [20, 'too long room title'],
     },
     description: {
         type: String,
@@ -15,7 +14,7 @@ const roomSchema = new mongoose.Schema({
     member: {
         type: Number,
         required: true,
-        minLength: [5, 'too little members to room '],
+        minLength: [4, 'too little members to room '],
         maxLength:[10, 'too many members to room'],
     },
     isAvailable: {
@@ -24,4 +23,4 @@ const roomSchema = new mongoose.Schema({
     }
 }, { timestamps: true });
 
-module.exports = mongoose.model('roomSchema', roomSchema);
+module.exports = mongoose.model('Room', roomSchema);
