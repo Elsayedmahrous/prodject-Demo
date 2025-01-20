@@ -2,8 +2,10 @@ const asyncHandler = require('express-async-handler');
 const apiError = require('../utils/ApiError');
 const crypto = require('bcryptjs');
 const User = require('../Models/userSchema.js');
-const createToken = require('../utils/createToken.js');
+const Room = require('../Models/roomSchema.js')
 const factory = require('../services/handlersFactory.js');
+const ApiError = require('../utils/ApiError');
+
 
 /**
  * @desc  Create specific user
@@ -47,46 +49,17 @@ exports.changeUserPassword = asyncHandler(async (req, res, next) => {
     res.status(200).json({ data: document });
 });
 /**
- * @desc   Get logged user data
- * @route  Get  /api/v1/users/getMe
- * @access  Private/protect
+ * @desc    Get user profile
+ * @route   Get /api/v1/users/user-profile
+ * @access  Private/Manager
  */
-exports.getLoggedUserData = asyncHandler(async (req, res, next) => {
-    req.params.id = req.user._id;
-    next()
-});
-/**
- * @desc   update logged user data
- * @route  put  /api/v1/users/getMe
- * @access  Private/protect
- */
-exports.updateLoggedUserPassword = asyncHandler(async (req, res, next) => {
-    const document = await User.findByIdAndUpdate(req.user._id, {
-        password: await crypto.hash(req.body.password, 12)
-    }, { new: true });
-    const token = await createToken(user._id);
-    res.status(200).json({ data: document, token });
-});
-/**
- * @desc   update logged user data(without password ,role)
- * @route  put  /api/v1/users/updateMe
- * @access  Private/protect
- */
-exports.updateLoggedUserData = asyncHandler(async (req, res, next) => {
-    const document = await User.findByIdAndUpdate(req.params.id, {
-        name: req.body.name,
-        email: req.body.email,
-        userName: req.body.userName
-    }, { new: true })
-    res.status(200).json({ data: document });
-    
-});
-/**
- * @desc   Deactivate logged user
- * @route  Delete  /api/v1/users/deleteMe
- * @access  Private/protect
- */
-exports.deleteLoggedUserData = asyncHandler(async (req, res, next) => {
-    await User.findByIdAndDelete(req.params.id)
-    res.status(200).json({ data: 'success' });
+exports.getUserProfile = asyncHandler(async (req, res, next) => {
+    const { userId } = req.params;
+    const user = await User.findById(userId).populate('rooms','title description isAvailable member');
+    if (!user) {
+        return next(new ApiError('User not found', 404));
+    }
+
+    res.status(200).json({ data: user});
 })
+
