@@ -55,9 +55,15 @@ exports.addUserToRoom = asyncHandler(async (req, res, next) => {
     if (room.users.includes(userId)) {
         return next(new ApiError('User already exists'), 401);
     };
+    
+    
     room.users.push(userId);
+    
+    if (!room.Admin) {
+        room.Admin = userId;
+    }
     await room.save();
-
+    
     user.rooms.push(room._id);
     await user.save();
 
@@ -101,7 +107,9 @@ exports.getUsersToRoom = asyncHandler(async (req, res, next) => {
  * @access Manager
  */
 exports.getRoomDetails = asyncHandler(async (req, res, next) => {
-    const room = await Room.findById(req.params.id);
+    const room = await Room.findById(req.params.id)
+        .populate({ path: 'users', select: "name email userName profileImg" })
+        .populate({ path: 'Admin', select: "name email userName profileImg" });
     if (!room) {
         return next(new ApiError('Room not found By Id', 404));
     }
@@ -110,3 +118,5 @@ exports.getRoomDetails = asyncHandler(async (req, res, next) => {
         data: { room }
     })
 })
+
+
