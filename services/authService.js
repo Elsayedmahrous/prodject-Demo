@@ -62,12 +62,13 @@ exports.protect = asyncHandler(async (req, res, next) => {
         return next(new ApiError('the user that belong this token does no longer exist', 401));
     }
     //* 4) check of user change his password after token create
-    if (currentUser.passwordChangeAt instanceof Date && decoded.iat) {
-        const passwordChangeAtTimestamp = parseInt(currentUser.passwordChangeAt.getTime() / 1000, 10);
-        if (passwordChangeAtTimestamp > decoded.iat) {
-            return next(new ApiError('User recently changed his password. please login again...', 401));
+    if (currentUser.passwordChangeAt && decoded.iat) {
+        const passwordChangedTimestamp = parseInt(currentUser.passwordChangeAt.getTime() / 1000, 10);
+        if (decoded.iat < passwordChangedTimestamp) {
+            return next(new ApiError('User recently changed his password. Please log in again.', 401));
         }
-    } 
+    }
+    
     req.user = currentUser;
     next();
 });
