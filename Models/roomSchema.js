@@ -20,6 +20,7 @@ const roomSchema = new mongoose.Schema({
     users: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
+        unique: true,
     }],
     isAvailable: {
         type: Boolean,
