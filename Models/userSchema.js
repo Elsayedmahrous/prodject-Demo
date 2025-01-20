@@ -37,6 +37,10 @@ const userSchema = new mongoose.Schema({
         default: 'User',
     },
     isManager: Boolean,
+    rooms: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Room',
+    }]
 },
     { timestamps: true });
 
