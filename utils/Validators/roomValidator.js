@@ -48,16 +48,19 @@ exports.deleteRoomValidator = [
 exports.updateRoomValidator = [
     check('id').isMongoId().withMessage('Invalid Room Id'),
     check('title')
+        .optional()
         .notEmpty()
         .withMessage('title required')
         .isLength({ min: 3 })
         .withMessage('too short title'),
     check('description')
+        .optional()
         .notEmpty()
         .withMessage('description required')
         .isLength({ min: 20 })
         .withMessage('too short the description title'),
     check('member')
+        .optional()
         .notEmpty()
         .withMessage('Members required')
         .isInt({min: 4 })
