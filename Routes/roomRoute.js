@@ -31,7 +31,7 @@ router.route('/:id')
     .put(updateRoomValidator, updateRoom)
     .delete(deleteRoomValidator, deleteRoom);
 
-router.post('/:id/add-member', addUserToRoom);
+router.post('/:id/add-member',authService.allowedTo("Manager","Admin"), addUserToRoom);
 router.get('/:id/members', getUsersToRoom);
 router.get('/:id/details', getRoomDetails);
 router.delete('/:id/delete-member', deleteUserFromRoom);
