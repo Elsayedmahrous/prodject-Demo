@@ -49,11 +49,17 @@ exports.addUserToRoom = asyncHandler(async (req, res, next) => {
     if (!user) {
         return next(new ApiError('user not found in this is room', 404));
     }
+    if (room.users.length >= room.member) {
+        return next(new ApiError('Room has reached the maximum number of members', 400));
+    }
     if (room.users.includes(userId)) {
         return next(new ApiError('User already exists'), 401);
     };
     room.users.push(userId);
     await room.save();
+
+    user.rooms.push(room._id);
+    await user.save();
 
     res.status(200).json({ message: 'User added successfully', room });
 });
