@@ -7,10 +7,7 @@ const {
     updateUser,
     deleteOne,
     changeUserPassword,
-    getLoggedUserData,
-    updateLoggedUserData,
-    updateLoggedUserPassword,
-    deleteLoggedUserData
+    getUserProfile
 }
     = require('../services/userService');
 const {
@@ -18,8 +15,7 @@ const {
     getUserValidator,
     updateUserValidator,
     deleteUserValidator,
-    changeUserPasswordValidator,
-    updateLoggedUserValidator
+    changeUserPasswordValidator, 
 }
     = require('../utils/Validators/userValidators');
 
@@ -53,8 +49,5 @@ router.route('/:id')
     deleteOne
 );
 
-router.get('/:getMe',authService.protect, getLoggedUserData,getOne);
-router.put('/:updateMe',authService.protect, updateLoggedUserValidator, updateLoggedUserData);
-router.put('/changeMyPassword',authService.protect, updateLoggedUserPassword);
-router.delete('/deleteMe',authService.protect, deleteLoggedUserData)
+router.get('/profile/:userId', authService.protect, getUserProfile);
 module.exports = router;
