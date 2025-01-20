@@ -20,8 +20,11 @@ const roomSchema = new mongoose.Schema({
     users: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
-        unique: true,
     }],
+    Admin: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+    },
     isAvailable: {
         type: Boolean,
         default: true,
