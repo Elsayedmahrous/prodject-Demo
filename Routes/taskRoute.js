@@ -6,13 +6,22 @@ const {
     updateTaskInRoom,
     deleteTaskFromRoom
 } = require('../services/taskService');
-const {createTaskValidator} = require('../utils/Validators/taskValidator')
+
+const {
+    createTaskValidator,
+    getTaskFormRoomValidator,
+    updateTaskInRoomValidator,
+    deleteTaskFormRoomValidator
+} = require('../utils/Validators/taskValidator')
+
 const authService = require('../services/authService');
+
 const router = express.Router();
+
 router.post('/:roomId/tasks', authService.protect, createTaskValidator, createTaskToRoom);
-router.get('/:id', authService.protect, getTaskFromRoom);
-router.put('/:roomId/task/:taskId', authService.protect, updateTaskInRoom);
-router.delete('/:id', authService.protect, deleteTaskFromRoom);
+router.get('/:id', authService.protect,getTaskFormRoomValidator, getTaskFromRoom);
+router.put('/:roomId/task/:taskId', authService.protect,updateTaskInRoomValidator, updateTaskInRoom);
+router.delete('/:id', authService.protect,deleteTaskFormRoomValidator, deleteTaskFromRoom);
 
 
 module.exports = router;
