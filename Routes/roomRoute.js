@@ -20,6 +20,8 @@ const {
 
  } = require('../utils/Validators/roomValidator');
 
+const { deleteTaskFromRoom } = require('../services/taskService');
+const {deleteTaskFormRoomValidator} = require('../utils/Validators/taskValidator')
 const authService = require('../services/authService');
 
 const router = express.Router();
@@ -30,6 +32,8 @@ router.route('/:id')
     .get(getRoomValidator, getRoom)
     .put(updateRoomValidator, updateRoom)
     .delete(deleteRoomValidator, deleteRoom);
+router.delete('/:roomId/tasks/:taskId', deleteTaskFormRoomValidator,deleteTaskFromRoom)
+
 
 router.post('/:id/add-member',authService.allowedTo("Manager","Admin"), addUserToRoom);
 router.get('/:id/members', getUsersToRoom);
