@@ -21,6 +21,7 @@ exports.createTaskToRoom = asyncHandler(async (req, res, next) => {
     const task = new Task({
         name: req.body.name,
         completed: req.body.completed,
+        room: roomId,
     });
     if (!task) {
         return next(new ApiError(`Task not found this is room`, 404));
@@ -38,14 +39,11 @@ exports.createTaskToRoom = asyncHandler(async (req, res, next) => {
  */
 exports.getTaskFromRoom = asyncHandler(async (req, res, next) => {
     const { roomId } = req.params
-    console.log('Room ID:', roomId);
     if (!roomId) {
         return next(new ApiError('Invalid room ID',400))
     }
-    const roomObjectId = new mongoose.Types.ObjectId(roomId);
-    const tasks = await Task.find({room: roomObjectId} ).populate('room');
-    console.log('Tasks found:', tasks);
-    if (!tasks || tasks.length === 0) {
+    const tasks = await Task.find({room: roomId} );
+    if (!tasks ) {
         return next(new ApiError('Tasks not found this is room', 404));
     };
    
