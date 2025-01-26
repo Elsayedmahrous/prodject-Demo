@@ -37,11 +37,23 @@ exports.createTaskToRoom = asyncHandler(async (req, res, next) => {
  * @access  Admin /Manager
  */
 exports.getTaskFromRoom = asyncHandler(async (req, res, next) => {
-    const task = await Task.findById(req.params.id);
-    if (!task) {
+    const { roomId } = req.params
+    console.log('Room ID:', roomId);
+    if (!roomId) {
+        return next(new ApiError('Invalid room ID',400))
+    }
+    const roomObjectId = new mongoose.Types.ObjectId(roomId);
+    const tasks = await Task.find({room: roomObjectId} ).populate('room');
+    console.log('Tasks found:', tasks);
+    if (!tasks || tasks.length === 0) {
         return next(new ApiError('Tasks not found this is room', 404));
     };
-    res.status(200).json({ task });
+   
+    res.status(200).json({ status: "success",
+        data: {
+          tasks,
+        },
+    });
 });
 /**
  * @desc    update specific by Id to do list to Room
@@ -68,21 +80,24 @@ exports.updateTaskInRoom = asyncHandler(async (req, res, next) => {
 })
 /**
  * @desc    delete specific by Id to do list to Room
- * @route   delete/api/v1/task
+ * @route   delete/api/v1/task:id
  * @access  Admin /Manager
  */
-exports.deleteTaskFromRoom = asyncHandler(async (req, res, next) => {
-    const {id} = req.params
-    const task = await Task.findByIdAndDelete(id);
-    if (!task) {
-        return next(new ApiError('Task not found with this id', 404));
-    }
-    const room = await Room.findById(task.room);
-    
-    if (room) {
-        room.tasks.pull(id);
-        await room.save();  
-    }
-    res.status(200).json({ task });
-});
 
+exports.deleteTaskFromRoom = asyncHandler(async (req, res, next) => {
+
+    const { taskId, roomId } = req.params;
+    const room = await Room.findById(roomId);
+    if (!room) {
+        return res.status(404).json({ status: 'fail', message: 'Room not found' });
+    }
+    const taskIndex = room.tasks.findIndex(task => task.toString() === taskId);
+    if (taskIndex === -1) {
+        return res.status(404).json({ status: 'fail', message: 'Task not found in this Room' });
+    }
+
+    room.tasks.splice(taskIndex, 1);
+    await room.save();
+
+    res.status(204).send();
+});
