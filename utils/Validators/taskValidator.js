@@ -23,7 +23,7 @@ exports.createTaskValidator = [
  * @access  Admin /Manager
  */
 exports.getTaskFormRoomValidator = [
-    check('id').isMongoId().withMessage('Invalid ID'),
+    check('roomId').isMongoId().withMessage('Invalid Room ID'),
     validationMiddleware
 ];
 /**
@@ -32,7 +32,8 @@ exports.getTaskFormRoomValidator = [
  * @access  Admin /Manager
  */
 exports.deleteTaskFormRoomValidator = [
-    check('id').isMongoId().withMessage('Invalid ID'),
+    check('roomId').isMongoId().withMessage('Invalid Room ID'),
+    check('taskId').isMongoId().withMessage('Invalid ID'),
     validationMiddleware
 ];
 /**
@@ -41,7 +42,7 @@ exports.deleteTaskFormRoomValidator = [
  * @access  Admin /Manager
  */
 exports.updateTaskInRoomValidator = [
-    check('id').isMongoId().withMessage('Invalid ID'),
+    check('roomId').isMongoId().withMessage('Invalid ID'),
     check('name')
         .optional()
         .notEmpty()
