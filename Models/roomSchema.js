@@ -11,12 +11,12 @@ const roomSchema = new mongoose.Schema({
         required: [true, 'you must enter description your room'],
         minLength: [20, 'too short room description ']
     },
-    member: {
+    member: [{
         type: Number,
         required: true,
         minLength: [4, 'too little members to room '],
         maxLength:[10, 'too many members to room'],
-    },
+    }],
     users: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
